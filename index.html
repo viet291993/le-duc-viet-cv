@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lê Đức Việt – Web Developer CV</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #0f1528;
+    --card: #141a2e;
+    --border: #1e2a45;
+    
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --dim: #94a3b8;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Be Vietnam Pro', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: start;
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 36px 40px;
+    margin-bottom: 2px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeSlideIn 0.6s ease both;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+  }
+
+  .header::after {
+    content: '</>';
+    position: absolute;
+    bottom: -12px; right: 24px;
+    font-size: 96px;
+    font-weight: 800;
+    color: rgba(0,212,255,0.04);
+    font-family: var(--sans);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .badge-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .badge-primary { background: rgba(0,212,255,0.12); color: var(--accent); border: 1px solid rgba(0,212,255,0.25); }
+  .badge-purple { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+  .badge-green { background: rgba(16,185,129,0.12); color: var(--accent3); border: 1px solid rgba(16,185,129,0.25); }
+
+  .name {
+    font-family: var(--sans);
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .name span { color: var(--accent); }
+
+  .title-line {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dim);
+    letter-spacing: 0.05em;
+    margin-bottom: 24px;
+  }
+
+  .contact-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  .contact-item .icon {
+    width: 28px; height: 28px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+    background: var(--surface);
+  }
+
+  .contact-item a { color: var(--dim); text-decoration: none; }
+  .contact-item a:hover { color: var(--accent); }
+
+  .exp-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    padding: 20px 28px;
+    background: var(--surface);
+    text-align: center;
+    gap: 4px;
+  }
+
+  .exp-num {
+    font-family: var(--sans);
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .exp-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ── LAYOUT ── */
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2px;
+    align-items: stretch;
+  }
+
+  .col-left, .col-right { display: flex; flex-direction: column; gap: 2px; }
+
+  .col-right { height: 100%; }
+  .col-right .section:last-child { flex: 1; }
+
+  /* ── SECTION ── */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    animation: fadeSlideIn 0.6s ease both;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+  }
+
+  .section-title {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  /* ── SUMMARY ── */
+  .summary-text {
+    color: var(--dim);
+    line-height: 1.8;
+    font-size: 12.5px;
+  }
+
+  .summary-text strong { color: var(--accent); font-weight: 500; }
+
+  /* ── GOALS ── */
+  .goal-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .goal-item:last-child { margin-bottom: 0; }
+
+  .goal-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  .goal-dot.purple { background: #a78bfa; }
+
+  .goal-text { font-size: 12.5px; color: var(--dim); line-height: 1.8; }
+  .goal-text strong { color: var(--text); font-weight: 500; }
+
+  /* ── EXPERIENCE ── */
+  .exp-item {
+    padding: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .exp-item:hover { border-color: rgba(0,212,255,0.3); }
+
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent), var(--accent2));
+  }
+
+  .exp-item:last-child { margin-bottom: 0; }
+
+  .exp-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .exp-period {
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0.8;
+    font-family: var(--mono);
+    border: 1px solid rgba(0,212,255,0.2);
+    padding: 2px 8px;
+    border-radius: 2px;
+    background: rgba(0,212,255,0.05);
+    flex-shrink: 0;
+  }
+
+  .exp-title {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .exp-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  .exp-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: var(--accent3);
+    border: 1px solid rgba(16,185,129,0.2);
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-bottom: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .exp-tasks { list-style: none; }
+
+  .exp-tasks li {
+    font-size: 12px;
+    color: var(--dim);
+    padding: 4px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.7;
+  }
+
+  .exp-tasks li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 11px;
+  }
+
+  .task-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 2px;
+    margin-right: 4px;
+    font-weight: 500;
+  }
+
+  .tag-blue { background: rgba(0,212,255,0.1); color: var(--accent); }
+  .tag-purple { background: rgba(124,58,237,0.12); color: #a78bfa; }
+  .tag-green { background: rgba(16,185,129,0.1); color: var(--accent3); }
+  .tag-orange { background: rgba(251,146,60,0.12); color: #fb923c; }
+
+  /* ── SKILLS ── */
+  .skill-group { margin-bottom: 18px; }
+  .skill-group:last-child { margin-bottom: 0; }
+
+  .skill-group-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .skill-group-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .skill-tag {
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--dim);
+    border-radius: 3px;
+    background: var(--surface);
+    transition: all 0.15s;
+    cursor: default;
+  }
+
+  .skill-tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,255,0.06);
+  }
+
+  .skill-tag.primary {
+    border-color: rgba(0,212,255,0.3);
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+  }
+
+  /* ── EDUCATION ── */
+  .edu-block {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .edu-block::after {
+    content: 'B.S.';
+    position: absolute;
+    bottom: -8px; right: 12px;
+    font-family: var(--sans);
+    font-size: 56px;
+    font-weight: 800;
+    color: rgba(124,58,237,0.06);
+  }
+
+  .edu-school {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .edu-field {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .edu-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* ── STAT BLOCKS ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .stat-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: var(--sans);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── TERMINAL BLOCK ── */
+  .terminal {
+    background: #080c18;
+    border: 1px solid var(--border);
+    padding: 20px;
+    font-size: 11.5px;
+  }
+
+  .terminal-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    align-items: center;
+  }
+
+  .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .t-red { background: #ff5f57; }
+  .t-yellow { background: #febc2e; }
+  .t-green { background: #28c840; }
+
+  .terminal-line { color: var(--muted); line-height: 2; }
+  .terminal-line .prompt { color: var(--accent3); }
+  .terminal-line .cmd { color: #fff; }
+  .terminal-line .val { color: var(--accent); }
+  .terminal-line .comment { color: #475569; }
+
+  /* ── MARKET LINE ── */
+  .market-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    padding: 3px 10px;
+    border: 1px solid rgba(251,146,60,0.25);
+    color: #fb923c;
+    background: rgba(251,146,60,0.06);
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .dot-anim {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #fb923c;
+    animation: pulse 1.5s infinite;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  .section:nth-child(1) { animation-delay: 0.1s; }
+  .section:nth-child(2) { animation-delay: 0.2s; }
+  .section:nth-child(3) { animation-delay: 0.25s; }
+  .section:nth-child(4) { animation-delay: 0.3s; }
+
+  @media (max-width: 700px) {
+    .main { grid-template-columns: 1fr; }
+    .header { grid-template-columns: 1fr; }
+    .name { font-size: 28px; }
+    .exp-num { font-size: 36px; }
+  }
+
+  @media print {
+    body { background: #fff; color: #111; }
+    body::before { display: none; }
+    .section, .header, .exp-item, .edu-block, .stat-block, .terminal { border-color: #ddd; background: #fff; }
+    .name, .exp-num, .stat-value { color: #1a1a2e; }
+    .section-title { color: #1a1a2e; }
+    .skill-tag { color: #444; border-color: #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="badge-row">
+        <span class="badge badge-primary">Open to Work</span>
+        <span class="badge badge-purple">Backend Focus</span>
+        <span class="badge badge-green">System Design</span>
+      </div>
+      <div class="name">LÊ ĐỨC <span>VIỆT</span></div>
+      <div class="title-line">Web Developer &nbsp;·&nbsp; Backend & System Design</div>
+      <div class="contact-grid">
+        <div class="contact-item"><div class="icon">📍</div>Hà Nội, Việt Nam</div>
+        <div class="contact-item"><div class="icon">✉️</div><a href="/cdn-cgi/l/email-protection#a5d3ccc0d1979c949c9c96e5c0c8c4ccc98bc6cac8"><span class="__cf_email__" data-cfemail="64120d0110565d555d5d57240109050d084a070b09">[email&#160;protected]</span></a></div>
+        <div class="contact-item"><div class="icon">📞</div><a href="tel:0363389498">0363 389 498</a></div>
+      </div>
+    </div>
+    <div class="exp-block">
+      <div class="exp-num">5</div>
+      <div class="exp-label">Years of<br>Experience</div>
+    </div>
+  </div>
+
+
+  <div class="main">
+
+    <!-- LEFT COLUMN -->
+    <div class="col-left">
+
+      <!-- TÓM TẮT -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">// 01</span>
+          <span class="section-title">Tóm Tắt Chuyên Môn</span>
+        </div>
+        <p class="summary-text">
+          Lập trình viên Web với <strong>5 năm kinh nghiệm outsource</strong> cho thị trường <strong>Nhật Bản</strong>.
+          Từng tham gia xử lý nhiều loại task trên các nền tảng và ngôn ngữ khác nhau —
+          từ hệ thống <strong>Legacy</strong>, nền tảng <strong>BI</strong> đến <strong>Low-code</strong>.
+          Điểm mạnh là khả năng <strong>đọc hiểu tài liệu (Spec)</strong>, bắt nhịp nhanh với code base có sẵn
+          và tinh thần trách nhiệm cao.
+        </p>
+      </div>
+
+      <!-- MỤC TIÊU -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">// 02</span>
+          <span class="section-title">Mục Tiêu Nghề Nghiệp</span>
+        </div>
+        <div class="goal-item">
+          <div class="goal-dot"></div>
+          <div class="goal-text">
+            <strong>Ngắn hạn:</strong> Sau 5 năm làm đa nhiệm, mong muốn tìm kiếm cơ hội tại các công ty Product
+            để chuyên sâu vào vị trí <strong>Backend Developer</strong> — trực tiếp làm việc với kiến trúc hệ thống
+            (System Design) và hệ sinh thái <strong>Java / Node.js</strong>.
+          </div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-dot purple"></div>
+          <div class="goal-text">
+            <strong>Dài hạn:</strong> Trở thành Kỹ sư Backend cứng cáp, có khả năng thiết kế, xây dựng và
+            vận hành các hệ thống hoạt động <strong>ổn định và tối ưu hiệu suất</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- KINH NGHIỆM -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">// 03</span>
+          <span class="section-title">Kinh Nghiệm Làm Việc</span>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-header-row">
+            <div class="exp-title">Hệ thống phân tích dữ liệu GeminiOT</div>
+            <div class="exp-period">2023 – 2024</div>
+          </div>
+          <div class="exp-sub">Onsite tại DTS Việt Nam · Phát triển dựa trên Apache Superset (mã nguồn mở)</div>
+          <div class="exp-role">⬡ Developer</div>
+          <ul class="exp-tasks">
+            <li>Nghiên cứu và tùy biến mã nguồn Superset theo yêu cầu khách hàng Nhật</li>
+            <li><span class="task-tag tag-blue">React</span>Code các Custom Nodes để mở rộng khả năng kết nối dữ liệu</li>
+            <li>Thiết lập luồng tích hợp dữ liệu với công cụ Flow-based kéo thả</li>
+          </ul>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-header-row">
+            <div class="exp-title">BI GalleriaSolo & DataStudio@WEB</div>
+            <div class="exp-period">2019 – 2024</div>
+          </div>
+          <div class="exp-sub">Onsite tại DTS Việt Nam · Dashboard báo cáo & phân tích — Khách hàng: DTS Japan</div>
+          <div class="exp-role">⬡ Developer · Maintenance</div>
+          <ul class="exp-tasks">
+            <li><span class="task-tag tag-orange">Legacy</span>Bảo trì hệ thống cũ viết bằng Java Servlet và JavaScript cơ bản</li>
+            <li>Fix bug, xử lý UI lag, cải thiện tốc độ load biểu đồ</li>
+            <li>Bổ sung tính năng (CR) và đảm bảo hệ thống vận hành ổn định</li>
+          </ul>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-header-row">
+            <div class="exp-title">Các dự án Outsource đa nền tảng</div>
+            <div class="exp-period">2019 – 2024</div>
+          </div>
+          <div class="exp-sub">Onsite tại DTS Việt Nam · Xử lý linh hoạt các task theo yêu cầu — Thị trường Nhật Bản</div>
+          <div class="exp-role">⬡ Developer · Multi-stack</div>
+          <ul class="exp-tasks">
+            <li><span class="task-tag tag-purple">OutSystems</span>Xây dựng ứng dụng Low-code bằng nền tảng kéo thả</li>
+            <li><span class="task-tag tag-green">Java Selenium</span>Viết và vận hành kịch bản Automation Test</li>
+            <li><span class="task-tag tag-blue">C++</span>Đọc Spec tiếng Nhật và code mới các module hệ thống</li>
+            <li><span class="task-tag tag-orange">Python</span>Viết script tự động hóa hỗ trợ công việc nội bộ</li>
+            <li>Hỗ trợ task UI/UX với <strong>Angular</strong> và <strong>Flutter</strong> khi dự án thiếu nhân lực</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SIDE PROJECT -->
+      <div class="section" style="padding-bottom: 24px;">
+        <div class="section-header" style="margin-bottom: 12px;">
+          <span class="section-num">// 04</span>
+          <span class="section-title">Side Project</span>
+        </div>
+
+        <div class="exp-item" style="border-color: rgba(124,58,237,0.3);">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#7c3aed,#10b981);"></div>
+          <div class="exp-header-row">
+            <div class="exp-title">An Lạc PMS</div>
+            <div class="exp-period" style="border-color:rgba(124,58,237,0.3);color:#a78bfa;background:rgba(124,58,237,0.08);">2024 – nay</div>
+          </div>
+          <div class="exp-sub">Hệ thống Quản lý Vận hành Resort · An Lạc Ecofarm, Kim Bôi – Hòa Bình</div>
+          <div class="exp-role" style="color:#a78bfa;border-color:rgba(124,58,237,0.25);">⬡ Solo Developer · BA · System Design</div>
+          <ul class="exp-tasks">
+            <li>Phân tích và thiết kế toàn bộ nghiệp vụ resort: Booking, Check-in/out, Folio billing, Housekeeping, F&amp;B, Reporting</li>
+            <li><span class="task-tag tag-purple">NestJS 10</span>Kiến trúc module-based, REST API · JWT + Refresh Token · phân quyền nhiều vai trò</li>
+            <li><span class="task-tag tag-green">PostgreSQL</span>Prisma ORM · PostgreSQL (production), SQLite (dev) · state machine cho phòng &amp; booking</li>
+            <li><span class="task-tag tag-blue">Next.js</span>React 18 + TypeScript + TailwindCSS · React Query + Context · SSE real-time</li>
+            <li><span class="task-tag tag-orange">Export</span>Xuất báo giá / hóa đơn / báo cáo: ExcelJS · Puppeteer + pdf-lib</li>
+            <li>Deploy trên VPS · <span class="task-tag tag-purple">Roadmap</span>Redis cache, Bull Queue, Docker, GitHub Actions CI/CD, Sentry</li>
+          </ul>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+            <span class="skill-tag" style="font-size:10px;padding:2px 8px;">NestJS</span>
+            <span class="skill-tag" style="font-size:10px;padding:2px 8px;">PostgreSQL</span>
+            <span class="skill-tag" style="font-size:10px;padding:2px 8px;">Prisma</span>
+            <span class="skill-tag" style="font-size:10px;padding:2px 8px;">Next.js</span>
+            <span class="skill-tag" style="font-size:10px;padding:2px 8px;">React Query</span>
+            <span class="skill-tag" style="font-size:10px;padding:2px 8px;">JWT Auth</span>
+            <span class="skill-tag" style="font-size:10px;padding:2px 8px;">SSE</span>
+            <span class="skill-tag" style="font-size:10px;padding:2px 8px;">ExcelJS</span>
+            <span class="skill-tag" style="font-size:10px;padding:2px 8px;">Puppeteer</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col-right">
+
+      <!-- TERMINAL -->
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="t-dot t-red"></div>
+          <div class="t-dot t-yellow"></div>
+          <div class="t-dot t-green"></div>
+        </div>
+        <div class="terminal-line"><span class="prompt">$ </span><span class="cmd">whoami</span></div>
+        <div class="terminal-line"><span class="val">le-duc-viet</span></div>
+        <div class="terminal-line"><span class="prompt">$ </span><span class="cmd">cat skills.json</span></div>
+        <div class="terminal-line"><span class="comment"># focus: backend</span></div>
+        <div class="terminal-line"><span class="prompt">$ </span><span class="cmd">ping japan-market</span></div>
+        <div class="terminal-line"><span class="val">PONG · 5yr · 0 packet loss</span></div>
+        <div class="terminal-line"><span class="prompt">$ </span><span class="cmd">git log --oneline</span></div>
+        <div class="terminal-line"><span class="val">a1b2c3 fix: ui lag superset</span></div>
+        <div class="terminal-line"><span class="val">d4e5f6 feat: custom nodes</span></div>
+        <div class="terminal-line"><span class="val">g7h8i9 chore: automation test</span></div>
+      </div>
+
+      <!-- KỸ NĂNG -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">// 05</span>
+          <span class="section-title">Kỹ Năng</span>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Ngôn ngữ & Framework</div>
+          <div class="skill-tags">
+            <span class="skill-tag primary">Java</span>
+            <span class="skill-tag primary">Spring Boot</span>
+            <span class="skill-tag primary">Node.js</span>
+            <span class="skill-tag primary">NestJS</span>
+            <span class="skill-tag primary">TypeScript</span>
+            <span class="skill-tag primary">React</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Cơ sở dữ liệu</div>
+          <div class="skill-tags">
+            <span class="skill-tag">SQL Server</span>
+            <span class="skill-tag">MySQL</span>
+            <span class="skill-tag">PostgreSQL</span>
+            <span class="skill-tag">MariaDB</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Công cụ & Nền tảng</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Apache Superset</span>
+            <span class="skill-tag">OutSystems</span>
+            <span class="skill-tag">Prisma ORM</span>
+            <span class="skill-tag">Git</span>
+            <span class="skill-tag">Java Selenium</span>
+            <span class="skill-tag">Puppeteer</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Sử dụng thêm</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">C++</span>
+            <span class="skill-tag">Angular</span>
+            <span class="skill-tag">Flutter</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- HỌC VẤN -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">// 06</span>
+          <span class="section-title">Học Vấn</span>
+        </div>
+        <div class="edu-block">
+          <div class="market-tag"><div class="dot-anim"></div>Tốt nghiệp 2019</div>
+          <div class="edu-school">FPT Polytechnic College</div>
+          <div class="edu-field">Chuyên ngành: Ứng dụng Phần mềm</div>
+          <div class="edu-meta">
+            <span class="badge badge-green">Xếp loại: Giỏi</span>
+            <span class="badge badge-primary">2017 – 2019</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOFT SKILLS -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">// 07</span>
+          <span class="section-title">Điểm Mạnh</span>
+        </div>
+        <div class="skill-tags" style="gap:6px;">
+          <span class="skill-tag">Làm việc với khách hàng Nhật</span>
+          <span class="skill-tag">Onboard nhanh</span>
+          <span class="skill-tag">Trách nhiệm cao</span>
+          <span class="skill-tag">Đa nhiệm linh hoạt</span>
+          <span class="skill-tag">Self-learning</span>
+        </div>
+      </div>
+
+      <!-- HÌNH THỨC LÀM VIỆC -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">// 08</span>
+          <span class="section-title">Mong Muốn</span>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Hình thức</div>
+          <div class="skill-tags">
+            <span class="skill-tag primary">Linh hoạt (văn phòng + remote)</span>
+            <span class="skill-tag primary">Remote</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Khu vực</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Hà Nội</span>
+            <span class="skill-tag">Có thể Remote</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Vị trí</div>
+          <div class="skill-tags">
+            <span class="skill-tag primary">Backend Developer</span>
+            <span class="skill-tag">Công ty Product</span>
+          </div>
+        </div>
+
+        <div class="skill-group" style="margin-bottom:0;">
+          <div class="skill-group-label">Môi trường</div>
+          <div style="font-size:12px;color:var(--dim);line-height:1.8;">
+            Mong muốn được làm việc tại công ty Product, trong đội ngũ kỹ thuật mạnh —
+            nơi có thể đi sâu vào
+            <strong style="color:var(--text);">System Design</strong> và
+            <strong style="color:var(--text);">Backend Architecture</strong>.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
