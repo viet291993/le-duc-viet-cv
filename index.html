@@ -11,7 +11,6 @@
     --surface: #0f1528;
     --card: #141a2e;
     --border: #1e2a45;
-    
     --accent: #00d4ff;
     --accent2: #7c3aed;
     --accent3: #10b981;
@@ -187,7 +186,7 @@
   /* ── LAYOUT ── */
   .main {
     display: grid;
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 1.6fr 1fr;
     gap: 2px;
     align-items: stretch;
   }
@@ -202,7 +201,6 @@
     background: var(--card);
     border: 1px solid var(--border);
     padding: 28px 32px;
-    animation: fadeSlideIn 0.6s ease both;
   }
 
   .section-header {
@@ -533,8 +531,13 @@
 
   /* ── ANIMATIONS ── */
   @keyframes fadeSlideIn {
-    from { opacity: 0; transform: translateY(12px); }
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeSlideLeft {
+    from { opacity: 0; transform: translateX(-16px); }
+    to { opacity: 1; transform: translateX(0); }
   }
 
   @keyframes pulse {
@@ -542,10 +545,51 @@
     50% { opacity: 0.4; transform: scale(0.8); }
   }
 
-  .section:nth-child(1) { animation-delay: 0.1s; }
-  .section:nth-child(2) { animation-delay: 0.2s; }
-  .section:nth-child(3) { animation-delay: 0.25s; }
-  .section:nth-child(4) { animation-delay: 0.3s; }
+  @keyframes scanLine {
+    0% { transform: translateY(-100%); opacity: 0.6; }
+    100% { transform: translateY(400%); opacity: 0; }
+  }
+
+  @keyframes counterPop {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.15); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Header luôn animate ngay khi load */
+  .header {
+    animation: fadeSlideIn 0.7s ease both;
+  }
+
+  /* Scan line trên header */
+  .header::after { pointer-events: none; }
+  .header-scan {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0,212,255,0.4), transparent);
+    top: 0;
+    animation: scanLine 2.5s ease-out 0.8s both;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Section box luôn visible — chỉ animate CONTENT bên trong */
+  .section > *, .terminal > * {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .section.in-view > *, .terminal.in-view > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .section.in-view > *:nth-child(1), .terminal.in-view > *:nth-child(1) { transition-delay: 0.05s; }
+  .section.in-view > *:nth-child(2), .terminal.in-view > *:nth-child(2) { transition-delay: 0.15s; }
+  .section.in-view > *:nth-child(3), .terminal.in-view > *:nth-child(3) { transition-delay: 0.25s; }
+  .section.in-view > *:nth-child(4), .terminal.in-view > *:nth-child(4) { transition-delay: 0.35s; }
+  .section.in-view > *:nth-child(5), .terminal.in-view > *:nth-child(5) { transition-delay: 0.45s; }
+  .section.in-view > *:nth-child(6), .terminal.in-view > *:nth-child(6) { transition-delay: 0.52s; }
 
   @media (max-width: 700px) {
     .main { grid-template-columns: 1fr; }
@@ -554,22 +598,335 @@
     .exp-num { font-size: 36px; }
   }
 
+  /* ── LIGHT MODE ── */
+  body.light {
+    --bg: #f0f4f8;
+    --surface: #e8edf2;
+    --card: #ffffff;
+    --border: #cbd5e1;
+    --accent: #0284c7;
+    --accent2: #7c3aed;
+    --accent3: #059669;
+    --text: #0f172a;
+    --muted: #94a3b8;
+    --dim: #475569;
+  }
+
+  body.light::before {
+    background-image:
+      linear-gradient(rgba(2,132,199,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(2,132,199,0.04) 1px, transparent 1px);
+  }
+
+  body.light .terminal {
+    background: #1e293b;
+    border-color: #94a3b8;
+  }
+
+  body.light .terminal .terminal-line { color: #cbd5e1; }
+  body.light .terminal .prompt { color: #34d399; }
+  body.light .terminal .cmd { color: #f1f5f9; }
+  body.light .terminal .val { color: #7dd3fc; }
+  body.light .terminal .comment { color: #64748b; }
+
+  body.light .name { color: #0f172a; }
+  body.light .name span { color: var(--accent); }
+  body.light .exp-num { color: var(--accent); }
+  body.light .section-title { color: #0f172a; }
+  body.light .edu-school { color: #0f172a; }
+  body.light .exp-title { color: #0f172a; }
+  body.light .skill-tag.primary { background: rgba(2,132,199,0.1); color: var(--accent); border-color: rgba(2,132,199,0.3); }
+  body.light .badge-primary { background: rgba(2,132,199,0.1); color: var(--accent); border-color: rgba(2,132,199,0.3); }
+  body.light .contact-item a { color: var(--dim); }
+  body.light .exp-item { background: #f8fafc; }
+  body.light .edu-block { background: #f8fafc; }
+
+  /* ── TOGGLE BUTTON ── */
+  .theme-toggle {
+    z-index: 100;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--dim);
+    padding: 8px 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
   @media print {
-    body { background: #fff; color: #111; }
-    body::before { display: none; }
-    .section, .header, .exp-item, .edu-block, .stat-block, .terminal { border-color: #ddd; background: #fff; }
-    .name, .exp-num, .stat-value { color: #1a1a2e; }
-    .section-title { color: #1a1a2e; }
-    .skill-tag { color: #444; border-color: #ccc; }
+    .theme-toggle, div[style*="position:fixed"] { display: none !important; }
+    * { animation: none !important; transition: none !important; }
+
+    html, body {
+      background: #fff !important;
+      color: #000 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      height: auto !important;
+    }
+    body::before { display: none !important; }
+
+    .wrapper {
+      padding: 0 !important;
+      max-width: 100% !important;
+      zoom: 0.80;
+    }
+
+    .header {
+      padding: 18px 24px !important;
+      margin-bottom: 3px !important;
+      background: #fff !important;
+      border: 1px solid #ddd !important;
+      color: #000 !important;
+      box-shadow: none !important;
+      overflow: hidden !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .main {
+      display: block !important;
+      width: 100% !important;
+    }
+
+    .main::after {
+      content: '' !important;
+      display: table !important;
+      clear: both !important;
+    }
+
+    .col-left {
+      float: left !important;
+      width: 61% !important;
+      display: block !important;
+      padding-right: 3px !important;
+      box-sizing: border-box !important;
+    }
+
+    .col-right {
+      float: right !important;
+      width: 39% !important;
+      display: block !important;
+      padding-left: 0 !important;
+      box-sizing: border-box !important;
+      height: auto !important;
+    }
+
+    .col-right .section:last-child { flex: unset !important; }
+
+    .section {
+      display: block !important;
+      padding: 12px 16px !important;
+      margin-bottom: 3px !important;
+      background: #fff !important;
+      border: 1px solid #ddd !important;
+      color: #000 !important;
+      box-shadow: none !important;
+    }
+
+    .exp-item, .edu-block, .exp-block, .stat-block {
+      background: #fff !important;
+      border: 1px solid #ddd !important;
+      color: #000 !important;
+      box-shadow: none !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      padding: 10px 14px !important;
+    }
+
+    .terminal {
+      display: block !important;
+      background: #f1f5f9 !important;
+      border: 1px solid #cbd5e1 !important;
+      box-shadow: none !important;
+      padding: 12px 14px !important;
+      margin-bottom: 3px !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .section-header { margin-bottom: 10px !important; padding-bottom: 8px !important; }
+
+    .skill-tag, .badge { background: #f8fafc !important; border: 1px solid #ccc !important; color: #111 !important; }
+    .task-tag { background: #f1f5f9 !important; border: 1px solid #ccc !important; color: #333 !important; }
+
+    .contact-item { color: #000 !important; }
+    .contact-item a { color: #000 !important; text-decoration: none !important; }
+    .contact-item .icon { background: #fff !important; border: 1px solid #ddd !important; color: #000 !important; }
+
+    .name, .name span, .exp-num, .section-num { color: #0284c7 !important; }
+    .section-title { color: #000 !important; border-bottom: 2px solid #eee !important; }
+    .exp-title { color: #000 !important; }
+    .edu-school { color: #000 !important; }
+
+    .terminal-line { color: #475569 !important; }
+    .terminal-line .cmd { color: #000 !important; font-weight: bold; }
+    .terminal-line .val { color: #0284c7 !important; }
+    .terminal-line .prompt { color: #059669 !important; }
+    .terminal-line .comment { color: #94a3b8 !important; }
+
+    .exp-item::before { background: #0284c7 !important; }
+    .exp-tasks li { color: #444 !important; }
+    .summary-text, .goal-text { color: #444 !important; }
+    .exp-sub, .edu-field { color: #666 !important; }
+
+    @page { margin: 0.8cm; size: A4 portrait; }
   }
 </style>
 </head>
 <body>
 
+<div style="position:fixed;top:20px;right:20px;z-index:100;display:flex;gap:8px;">
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <span id="themeIcon">☀️</span>
+    <span id="themeLabel">Light mode</span>
+  </button>
+  <button class="theme-toggle" onclick="window.print()">
+    🖨️ <span>In CV</span>
+  </button>
+</div>
+
+<script>
+  /* ── THEME ── */
+  function toggleTheme() {
+    const body = document.body;
+    const isLight = body.classList.toggle('light');
+    document.getElementById('themeIcon').textContent = isLight ? '🌙' : '☀️';
+    document.getElementById('themeLabel').textContent = isLight ? 'Dark mode' : 'Light mode';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  }
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('themeIcon').textContent = '🌙';
+    document.getElementById('themeLabel').textContent = 'Dark mode';
+  }
+
+  /* ── 1. SCROLL-TRIGGERED CONTENT REVEAL ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    const observeEls = document.querySelectorAll('.section, .terminal');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+    observeEls.forEach(el => observer.observe(el));
+
+    /* ── 2. COUNTER ANIMATION ── */
+    const counterEl = document.getElementById('expCounter');
+    const target = 5;
+    let current = 0;
+    const duration = 1200;
+    const stepTime = duration / target;
+    counterEl.style.animation = 'none';
+    counterEl.style.opacity = '0';
+    counterEl.style.transform = 'scale(0.5)';
+
+    setTimeout(() => {
+      counterEl.style.transition = 'opacity 0.3s, transform 0.3s';
+      counterEl.style.opacity = '1';
+      counterEl.style.transform = 'scale(1.1)';
+      const interval = setInterval(() => {
+        current++;
+        counterEl.textContent = current;
+        if (current >= target) {
+          clearInterval(interval);
+          counterEl.style.transform = 'scale(1)';
+        }
+      }, stepTime);
+    }, 600);
+
+    /* ── 3. TERMINAL TYPING EFFECT ── */
+    const lines = [
+      { type: 'prompt', text: '$ ', next: { type: 'cmd', text: 'whoami' } },
+      { type: 'val',    text: 'le-duc-viet' },
+      { type: 'prompt', text: '$ ', next: { type: 'cmd', text: 'cat skills.json' } },
+      { type: 'comment',text: '# focus: backend' },
+      { type: 'prompt', text: '$ ', next: { type: 'cmd', text: 'ping japan-market' } },
+      { type: 'val',    text: 'PONG · 5yr · 0 packet loss' },
+      { type: 'prompt', text: '$ ', next: { type: 'cmd', text: 'git log --oneline' } },
+      { type: 'val',    text: 'a1b2c3 fix: ui lag superset' },
+      { type: 'val',    text: 'd4e5f6 feat: custom nodes' },
+      { type: 'val',    text: 'g7h8i9 chore: automation test' },
+    ];
+
+    const output = document.getElementById('terminalOutput');
+    const CHAR_SPEED = 38;
+    const LINE_PAUSE = 160;
+
+    function buildLineEl(lineData) {
+      const div = document.createElement('div');
+      div.className = 'terminal-line';
+      if (lineData.next) {
+        const p = document.createElement('span');
+        p.className = 'prompt';
+        p.textContent = lineData.text;
+        div.appendChild(p);
+        const c = document.createElement('span');
+        c.className = lineData.next.type;
+        div.appendChild(c);
+        return { div, typingSpan: c, fullText: lineData.next.text };
+      } else {
+        const s = document.createElement('span');
+        s.className = lineData.type;
+        div.appendChild(s);
+        return { div, typingSpan: s, fullText: lineData.text };
+      }
+    }
+
+    /* Pre-render tất cả dòng ngay từ đầu → terminal có kích thước cố định */
+    const lineEls = lines.map(lineData => {
+      const built = buildLineEl(lineData);
+      built.typingSpan.textContent = '\u00a0'; /* giữ chiều cao dòng */
+      output.appendChild(built.div);
+      return { typingSpan: built.typingSpan, fullText: built.fullText };
+    });
+
+    /* Sau đó type text vào từng span đã có sẵn */
+    let lineIdx = 0;
+    function typeLine() {
+      if (lineIdx >= lineEls.length) return;
+      const { typingSpan, fullText } = lineEls[lineIdx];
+      typingSpan.textContent = ''; /* xóa placeholder trước khi gõ */
+      let charIdx = 0;
+      function typeChar() {
+        if (charIdx < fullText.length) {
+          typingSpan.textContent += fullText[charIdx];
+          charIdx++;
+          setTimeout(typeChar, CHAR_SPEED);
+        } else {
+          lineIdx++;
+          setTimeout(typeLine, LINE_PAUSE);
+        }
+      }
+      typeChar();
+    }
+
+    setTimeout(typeLine, 900);
+  });
+</script>
+
 <div class="wrapper">
 
   <!-- HEADER -->
   <div class="header">
+    <div class="header-scan"></div>
     <div>
       <div class="badge-row">
         <span class="badge badge-primary">Open to Work</span>
@@ -579,13 +936,19 @@
       <div class="name">LÊ ĐỨC <span>VIỆT</span></div>
       <div class="title-line">Web Developer &nbsp;·&nbsp; Backend & System Design</div>
       <div class="contact-grid">
-        <div class="contact-item"><div class="icon">📍</div>Hà Nội, Việt Nam</div>
-        <div class="contact-item"><div class="icon">✉️</div><a href="/cdn-cgi/l/email-protection#a5d3ccc0d1979c949c9c96e5c0c8c4ccc98bc6cac8"><span class="__cf_email__" data-cfemail="64120d0110565d555d5d57240109050d084a070b09">[email&#160;protected]</span></a></div>
+      <div class="contact-item"><div class="icon">📍</div>Hà Nội, Việt Nam</div>
+      <div class="contact-item">
+      <div class="icon">✉️</div>
+        <a href="#" 
+          onclick="this.href='mailto:' + 'viet291993' + '@' + 'gmail.com';">
+          viet291993@gmail.com
+        </a>
+      </div>
         <div class="contact-item"><div class="icon">📞</div><a href="tel:0363389498">0363 389 498</a></div>
       </div>
     </div>
     <div class="exp-block">
-      <div class="exp-num">5</div>
+      <div class="exp-num" id="expCounter">0</div>
       <div class="exp-label">Years of<br>Experience</div>
     </div>
   </div>
@@ -729,22 +1092,13 @@
     <div class="col-right">
 
       <!-- TERMINAL -->
-      <div class="terminal">
+      <div class="terminal" id="terminalBlock">
         <div class="terminal-bar">
           <div class="t-dot t-red"></div>
           <div class="t-dot t-yellow"></div>
           <div class="t-dot t-green"></div>
         </div>
-        <div class="terminal-line"><span class="prompt">$ </span><span class="cmd">whoami</span></div>
-        <div class="terminal-line"><span class="val">le-duc-viet</span></div>
-        <div class="terminal-line"><span class="prompt">$ </span><span class="cmd">cat skills.json</span></div>
-        <div class="terminal-line"><span class="comment"># focus: backend</span></div>
-        <div class="terminal-line"><span class="prompt">$ </span><span class="cmd">ping japan-market</span></div>
-        <div class="terminal-line"><span class="val">PONG · 5yr · 0 packet loss</span></div>
-        <div class="terminal-line"><span class="prompt">$ </span><span class="cmd">git log --oneline</span></div>
-        <div class="terminal-line"><span class="val">a1b2c3 fix: ui lag superset</span></div>
-        <div class="terminal-line"><span class="val">d4e5f6 feat: custom nodes</span></div>
-        <div class="terminal-line"><span class="val">g7h8i9 chore: automation test</span></div>
+        <div id="terminalOutput"></div>
       </div>
 
       <!-- KỸ NĂNG -->
@@ -822,8 +1176,23 @@
           <span class="section-num">// 07</span>
           <span class="section-title">Điểm Mạnh</span>
         </div>
-        <div class="skill-tags" style="gap:6px;">
-          <span class="skill-tag">Làm việc với khách hàng Nhật</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
+          <span class="badge badge-primary">Năng lực thực thi chuẩn xác</span>
+          <span class="badge badge-purple">Tư duy chất lượng khắt khe</span>
+        </div>
+        <div class="goal-item">
+          <div class="goal-dot"></div>
+          <div class="goal-text"><strong>Tính kỷ luật cao:</strong> Khả năng bám sát Specs và quy trình để hạn chế tối đa sai lệch ngay từ khâu bắt đầu.</div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-dot purple"></div>
+          <div class="goal-text"><strong>Độ tin cậy:</strong> Am hiểu văn hóa phối hợp dự án và các tiêu chuẩn khắt khe nhất của thị trường Nhật.</div>
+        </div>
+        <div class="goal-item" style="margin-bottom:0;">
+          <div class="goal-dot" style="background:var(--accent3);"></div>
+          <div class="goal-text"><strong>Sự bền bỉ:</strong> Năng lực làm việc ổn định và cam kết cao trong suốt 5 năm thực chiến.</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
           <span class="skill-tag">Onboard nhanh</span>
           <span class="skill-tag">Trách nhiệm cao</span>
           <span class="skill-tag">Đa nhiệm linh hoạt</span>
@@ -865,10 +1234,11 @@
         <div class="skill-group" style="margin-bottom:0;">
           <div class="skill-group-label">Môi trường</div>
           <div style="font-size:12px;color:var(--dim);line-height:1.8;">
-            Mong muốn được làm việc tại công ty Product, trong đội ngũ kỹ thuật mạnh —
-            nơi có thể đi sâu vào
+            Mong muốn được làm việc tại công ty Product, trong đội ngũ kỹ sư dày dặn kinh nghiệm —
+            nơi có thể đóng góp giá trị sẵn có, đồng thời không ngừng học hỏi và trau dồi chuyên sâu về
             <strong style="color:var(--text);">System Design</strong> và
-            <strong style="color:var(--text);">Backend Architecture</strong>.
+            <strong style="color:var(--text);">Backend Architecture</strong>
+            thông qua việc giải quyết các bài toán thực tế có quy mô lớn.
           </div>
         </div>
       </div>
