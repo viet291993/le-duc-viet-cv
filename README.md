@@ -23,5 +23,3 @@ Tôi có hơn 5 năm kinh nghiệm phát triển phần mềm, từng tham gia n
 ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 
-### 📊 GitHub Stats
-![Viet's GitHub Stats](https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=viet291993&theme=radical)
