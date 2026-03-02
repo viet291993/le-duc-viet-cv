@@ -24,4 +24,4 @@ Tôi có hơn 5 năm kinh nghiệm phát triển phần mềm, từng tham gia n
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 
 ### 📊 GitHub Stats
-![Viet's GitHub stats](https://github-readme-stats.vercel.app/api?username=viet291993&show_icons=true&theme=radical)
+![Viet's GitHub Stats](https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=viet291993&theme=radical)
