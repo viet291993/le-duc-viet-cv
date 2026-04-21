@@ -908,6 +908,9 @@
       return { typingSpan: built.typingSpan, fullText: built.fullText };
     });
 
+    // Ghi nhớ tất cả timeout để có thể hủy khi cần
+    const activeTimers = [];
+
     let lineIdx = 0;
     function typeLine() {
       if (lineIdx >= lineEls.length) return;
@@ -918,16 +921,42 @@
         if (charIdx < fullText.length) {
           typingSpan.textContent += fullText[charIdx];
           charIdx++;
-          setTimeout(typeChar, CHAR_SPEED);
+          activeTimers.push(setTimeout(typeChar, CHAR_SPEED));
         } else {
           lineIdx++;
-          setTimeout(typeLine, LINE_PAUSE);
+          activeTimers.push(setTimeout(typeLine, LINE_PAUSE));
         }
       }
       typeChar();
     }
 
-    setTimeout(typeLine, 900);
+    activeTimers.push(setTimeout(typeLine, 900));
+
+    // Hàm flush: điền đầy đủ nội dung ngay lập tức, không chờ animation
+    function flushAll() {
+      // Hủy tất cả animation đang chạy
+      activeTimers.forEach(id => clearTimeout(id));
+      activeTimers.length = 0;
+
+      // Điền đầy đủ text vào tất cả dòng terminal
+      lineEls.forEach(({ typingSpan, fullText }) => {
+        typingSpan.textContent = fullText;
+      });
+
+      // Hiện ngay số năm kinh nghiệm = 5
+      counterEl.style.transition = 'none';
+      counterEl.style.opacity = '1';
+      counterEl.style.transform = 'scale(1)';
+      counterEl.textContent = target;
+
+      // Reveal tất cả section (scroll animation)
+      document.querySelectorAll('.section, .terminal').forEach(el => {
+        el.classList.add('in-view');
+      });
+    }
+
+    // Trigger trước khi dialog in mở — đảm bảo nội dung đầy đủ trong PDF
+    window.addEventListener('beforeprint', flushAll);
   });
 </script>
 
